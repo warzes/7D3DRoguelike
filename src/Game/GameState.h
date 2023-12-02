@@ -6,6 +6,7 @@
 class GameState : public IState
 {
 public:
+	GameState(Viewport& view) : IState(view) {}
 	bool Create() final;
 	void Destroy() final;
 

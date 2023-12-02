@@ -3,10 +3,10 @@
 //-----------------------------------------------------------------------------
 bool GameState::Create()
 {
-	m_view.camera.Teleport({ 0.0f, 1.0f, -2.0f });
-
 	if (!m_world.Create())
 		return false;
+
+	m_view.camera.Teleport({ 0.0f, 0.0f, -2.0f });
 
 	return true;
 }
@@ -29,8 +29,8 @@ void GameState::Draw()
 //-----------------------------------------------------------------------------
 void GameState::cameraControl(float deltaTime)
 {
-	const float mouseSensitivity = 20.0f * deltaTime;
-	const float moveSpeed = 20.0f * deltaTime;
+	const float mouseSensitivity = 10.0f * deltaTime;
+	const float moveSpeed = 10.0f * deltaTime;
 
 	if (GetInputSystem().IsKeyDown(Input::KEY_W)) m_view.camera.MoveBy(moveSpeed);
 	if (GetInputSystem().IsKeyDown(Input::KEY_S)) m_view.camera.MoveBy(-moveSpeed);

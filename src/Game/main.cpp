@@ -10,7 +10,7 @@ int main(
 	[[maybe_unused]] char* argv[])
 {
 	EngineDeviceCreateInfo createInfo;
-	createInfo.window.maximized = false;
+	createInfo.window.maximized = true;
 	//createInfo.window.width = 1280;
 	//createInfo.window.height = 960;
 	createInfo.window.vsyncEnabled = true;
