@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Viewport.h"
+#include "Map.h"
 
 class World
 {
@@ -10,4 +10,7 @@ public:
 
 	void Update(float deltaTime);
 	void Draw(const Viewport& view);
+
+private:
+	Map m_map;
 };

@@ -10,6 +10,12 @@
     <ClCompile Include="World.cpp">
       <Filter>GameData</Filter>
     </ClCompile>
+    <ClCompile Include="Map.cpp">
+      <Filter>GameData\Map</Filter>
+    </ClCompile>
+    <ClCompile Include="Tile.cpp">
+      <Filter>GameData\Map</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h" />
@@ -26,6 +32,12 @@
     <ClInclude Include="World.h">
       <Filter>GameData</Filter>
     </ClInclude>
+    <ClInclude Include="Map.h">
+      <Filter>GameData\Map</Filter>
+    </ClInclude>
+    <ClInclude Include="Tile.h">
+      <Filter>GameData\Map</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameState">
@@ -36,6 +48,9 @@
     </Filter>
     <Filter Include="GameData">
       <UniqueIdentifier>{d8eb708d-bef5-4ff3-aec1-06bbfce0e9f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameData\Map">
+      <UniqueIdentifier>{015a035c-0c4c-4e9f-b773-d6ee0c4e89c9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

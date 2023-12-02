@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "World.h"
+#include "Viewport.h"
 //-----------------------------------------------------------------------------
 namespace
 {
@@ -20,11 +21,15 @@ out vec4 Color;
 
 void main()
 {
+	// Rotate the object normals by a 3x3 normal matrix.
+	// We could also do this CPU-side to avoid doing it per-vertex
+	mat3 normalMatrix = transpose(inverse(mat3(uWorld)));
+
+	// output
 	FragmentPosition = vec3(uWorld * vec4(aPosition, 1.0));
-	Normal = mat3(transpose(inverse(uWorld))) * aNormal;
+	Normal = normalize(normalMatrix * aNormal);
 	TexCoords = aTexCoord;
 	Color = aColor;
-
 	gl_Position = uProjection * uView * vec4(FragmentPosition, 1.0);
 }
 )";
@@ -64,14 +69,13 @@ void main()
 	vec3 ambient = uLight.ambient * diffuseColor.rgb;
 
 	// diffuse 
-	vec3 norm = normalize(Normal);
 	vec3 lightDir = normalize(-uLight.direction);
-	float diff = max(dot(norm, lightDir), 0.0);
+	float diff = max(dot(Normal, lightDir), 0.0);
 	vec3 diffuse = uLight.diffuse * diff * texture(uMaterial.diffuse, TexCoords).rgb;
 
 	// specular
 	vec3 viewDir = normalize(uViewPosition - FragmentPosition);
-	vec3 reflectDir = reflect(-lightDir, norm);
+	vec3 reflectDir = reflect(-lightDir, Normal);
 	float spec = pow(max(dot(viewDir, reflectDir), 0.0), uMaterial.shininess);
 	vec3 specular = uLight.specular * spec * uMaterial.specular;
 
@@ -145,6 +149,30 @@ bool World::Create()
 	texInfo.mipmap = true;
 	diffuse = renderSystem.CreateTexture2D("../Data/Textures/testTop.png", true, texInfo);
 
+
+
+	{
+		auto model = GetGraphicsSystem().CreateModel("../Data/Models/box.obj");
+
+		std::vector<StaticMeshVertex> vert;
+		for (int i = 0; i < model->subMeshes[0].indices.size(); i++)
+		{
+			auto index = model->subMeshes[0].indices[i];
+			StaticMeshVertex v = model->subMeshes[0].vertices[index];
+			v.texCoords += 0.5f;
+			vert.push_back(v);
+		}
+
+
+		for (int i = 0; i < vert.size(); i++)
+		{
+			std::string s = "";
+		}
+	}
+
+	if (!m_map.Create())
+		return false;
+
 	return true;
 }
 //-----------------------------------------------------------------------------
@@ -153,10 +181,12 @@ void World::Destroy()
 	spTile.reset();
 	geom.reset();
 	diffuse.reset();
+	m_map.Destroy();
 }
 //-----------------------------------------------------------------------------
 void World::Update(float deltaTime)
 {
+	m_map.Update(deltaTime);
 }
 //-----------------------------------------------------------------------------
 void World::Draw(const Viewport& view)
@@ -181,5 +211,7 @@ void World::Draw(const Viewport& view)
 	renderSystem.SetUniform("uProjection", view.perspective);
 
 	renderSystem.Draw(geom);
+
+	m_map.Draw(view);
 }
 //-----------------------------------------------------------------------------
