@@ -145,7 +145,6 @@ bool World::Create()
 	texInfo.mipmap = true;
 	diffuse = renderSystem.CreateTexture2D("../Data/Textures/testTop.png", true, texInfo);
 
-	GetInputSystem().SetMouseLock(true);
 	return true;
 }
 //-----------------------------------------------------------------------------
@@ -168,12 +167,12 @@ void World::Draw(const Viewport& view)
 	renderSystem.Bind(spTile);
 	renderSystem.Bind(diffuse, 0);
 	renderSystem.SetUniform("uMaterial.diffuse", 0);
-	renderSystem.SetUniform("uMaterial.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+	renderSystem.SetUniform("uMaterial.specular", glm::vec3(0.7f, 0.7f, 0.7f));
 	renderSystem.SetUniform("uMaterial.shininess", 32.0f);
 
 	renderSystem.SetUniform("uLight.direction", glm::vec3(-0.2f, -1.0f, 0.3f));
 	renderSystem.SetUniform("uLight.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
-	renderSystem.SetUniform("uLight.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+	renderSystem.SetUniform("uLight.diffuse", glm::vec3(1.0f, 1.0f, 1.0f));
 	renderSystem.SetUniform("uLight.specular", glm::vec3(1.0f, 1.0f, 1.0f));
 
 	renderSystem.SetUniform("uViewPosition", view.camera.position);

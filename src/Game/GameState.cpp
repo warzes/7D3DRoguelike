@@ -6,7 +6,7 @@ bool GameState::Create()
 	if (!m_world.Create())
 		return false;
 
-	m_view.camera.Teleport({ 0.0f, 0.0f, -2.0f });
+	m_view.camera.Teleport({ 0.0f, 1.0f, -3.0f });
 
 	return true;
 }
@@ -32,13 +32,36 @@ void GameState::cameraControl(float deltaTime)
 	const float mouseSensitivity = 10.0f * deltaTime;
 	const float moveSpeed = 10.0f * deltaTime;
 
-	if (GetInputSystem().IsKeyDown(Input::KEY_W)) m_view.camera.MoveBy(moveSpeed);
-	if (GetInputSystem().IsKeyDown(Input::KEY_S)) m_view.camera.MoveBy(-moveSpeed);
-	if (GetInputSystem().IsKeyDown(Input::KEY_A)) m_view.camera.StrafeBy(moveSpeed);
-	if (GetInputSystem().IsKeyDown(Input::KEY_D)) m_view.camera.StrafeBy(-moveSpeed);
+	auto& input = GetInputSystem();
 
-	glm::vec2 delta = GetInputSystem().GetMouseDeltaPosition();
-	if (delta.x != 0.0f)  m_view.camera.RotateLeftRight(delta.x * mouseSensitivity);
-	if (delta.y != 0.0f)  m_view.camera.RotateUpDown(-delta.y * mouseSensitivity);
+	if (input.IsMouseButtonDown(Input::MOUSE_RIGHT))
+	{
+		if (m_cameraVisible)
+		{
+			m_cameraVisible = false;
+			GetInputSystem().SetMouseLock(true);
+		}
+	}
+	else
+	{
+		if (!m_cameraVisible)
+		{
+			m_cameraVisible = true;
+			GetInputSystem().SetMouseLock(false);
+		}
+	}
+
+
+	if (input.IsKeyDown(Input::KEY_W)) m_view.camera.MoveBy(moveSpeed);
+	if (input.IsKeyDown(Input::KEY_S)) m_view.camera.MoveBy(-moveSpeed);
+	if (input.IsKeyDown(Input::KEY_A)) m_view.camera.StrafeBy(moveSpeed);
+	if (input.IsKeyDown(Input::KEY_D)) m_view.camera.StrafeBy(-moveSpeed);
+
+	if (!m_cameraVisible)
+	{
+		glm::vec2 delta = input.GetMouseDeltaPosition();
+		if (delta.x != 0.0f) m_view.camera.RotateLeftRight(delta.x * mouseSensitivity);
+		if (delta.y != 0.0f) m_view.camera.RotateUpDown(-delta.y * mouseSensitivity);
+	}
 }
 //-----------------------------------------------------------------------------

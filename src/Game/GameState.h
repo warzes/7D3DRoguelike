@@ -17,4 +17,5 @@ private:
 	void cameraControl(float deltaTime);
 
 	World m_world;
+	bool m_cameraVisible = true;
 };
