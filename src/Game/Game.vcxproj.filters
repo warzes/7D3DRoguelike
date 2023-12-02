@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="GameApp.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="GameState.cpp">
+      <Filter>GameState</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GameApp.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="IState.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+    <ClInclude Include="Viewport.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>GameState</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="GameState">
+      <UniqueIdentifier>{87517e94-dfdd-4c47-ac2a-b982b2572a8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{c8700de9-c090-40d6-9078-97901b97f906}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

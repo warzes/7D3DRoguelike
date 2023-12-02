@@ -1,5 +1,8 @@
 #pragma once
 
+#include "GameState.h"
+
+
 class GameApp final : public IApp
 {
 public:
@@ -9,7 +12,12 @@ public:
 	void Render() final;
 	void Update(float deltaTime) final;
 
+	void SetState(StateType state);
+
 private:
-	int m_windowWidth = 0;
-	int m_windowHeight = 0;
+	Viewport m_view;
+	Texture2DRef m_textures[2];
+
+	IState* m_currentState = nullptr;
+	GameState m_gameState;
 };
