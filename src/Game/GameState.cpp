@@ -4,21 +4,27 @@
 bool GameState::Create()
 {
 	m_view.camera.Teleport({ 0.0f, 1.0f, -2.0f });
+
+	if (!m_world.Create())
+		return false;
+
 	return true;
 }
 //-----------------------------------------------------------------------------
 void GameState::Destroy()
 {
+	m_world.Destroy();
 }
 //-----------------------------------------------------------------------------
 void GameState::Update(float deltaTime)
 {
 	cameraControl(deltaTime);
-
+	m_world.Update(deltaTime);
 }
 //-----------------------------------------------------------------------------
 void GameState::Draw()
 {
+	m_world.Draw(m_view);
 }
 //-----------------------------------------------------------------------------
 void GameState::cameraControl(float deltaTime)

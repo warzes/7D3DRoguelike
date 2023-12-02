@@ -7,6 +7,9 @@
     <ClCompile Include="GameState.cpp">
       <Filter>GameState</Filter>
     </ClCompile>
+    <ClCompile Include="World.cpp">
+      <Filter>GameData</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameApp.h" />
@@ -20,6 +23,9 @@
     <ClInclude Include="GameState.h">
       <Filter>GameState</Filter>
     </ClInclude>
+    <ClInclude Include="World.h">
+      <Filter>GameData</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameState">
@@ -27,6 +33,9 @@
     </Filter>
     <Filter Include="Framework">
       <UniqueIdentifier>{c8700de9-c090-40d6-9078-97901b97f906}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameData">
+      <UniqueIdentifier>{d8eb708d-bef5-4ff3-aec1-06bbfce0e9f5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

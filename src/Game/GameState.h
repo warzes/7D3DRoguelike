@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IState.h"
+#include "World.h"
 
 class GameState : public IState
 {
@@ -13,4 +14,6 @@ public:
 
 private:
 	void cameraControl(float deltaTime);
+
+	World m_world;
 };
