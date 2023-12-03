@@ -7,8 +7,8 @@ namespace
 	const char* vsText = R"(
 layout(location = 0) in vec3 aPosition;
 layout(location = 1) in vec3 aNormal;
-layout(location = 2) in vec2 aTexCoord;
-layout(location = 3) in vec4 aColor;
+layout(location = 2) in vec3 aColor;
+layout(location = 3) in vec2 aTexCoord;
 
 uniform mat4 uWorld;
 uniform mat4 uView;
@@ -17,7 +17,7 @@ uniform mat4 uProjection;
 out vec3 FragmentPosition;
 out vec3 Normal;
 out vec2 TexCoords;
-out vec4 Color;
+out vec3 Color;
 
 void main()
 {
@@ -53,7 +53,7 @@ out vec4 FragmentColor;
 in vec3 FragmentPosition;
 in vec3 Normal;
 in vec2 TexCoords;
-in vec4 Color;
+in vec3 Color;
 
 uniform vec3 uViewPosition;
 uniform Material uMaterial;
@@ -62,8 +62,9 @@ uniform Light uLight;
 void main()
 {
 	// compute diffuse material
-	vec4 diffuseColor = texture(uMaterial.diffuse, TexCoords) * Color;
+	vec4 diffuseColor = texture(uMaterial.diffuse, TexCoords);
 	if (diffuseColor.a < 0.02) discard;
+	diffuseColor = diffuseColor * vec4(Color, 1.0);
 
 	// ambient
 	vec3 ambient = uLight.ambient * diffuseColor.rgb;
@@ -86,52 +87,54 @@ void main()
 	float vertices[] =
 	{
 		// positions          // normals           // texture coords // color
-		   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+			0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
+			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, 1.0f,  1.0f,  1.0f,
+			0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, 1.0f,  1.0f,  1.0f,
+		   -0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
+		   -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f, 1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
 
-		   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+			0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
+			0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f,  1.0f,  1.0f,
+			0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f,  1.0f,  1.0f,
+		   -0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
+		   -0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
 
-		   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
+		   -0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  1.0f,
+		   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
+		   -0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
+		   -0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+		   -0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
 
-			0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+			0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
+			0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  1.0f,
+			0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
+			0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
+			0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+			0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
 
-		   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
+			0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  1.0f,
+			0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
+			0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
+		   -0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+		   -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
 
-		   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-			0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-		   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+		   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
+			0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  1.0f,
+			0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
+			0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  1.0f,  0.0f,
+		   -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  0.0f,
+		   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f, 1.0f, 1.0f, 1.0f,  0.0f,  1.0f,
 	};
 
 	ShaderProgramRef spTile;
 	GeometryBufferRef geom;
 	Texture2DRef diffuse;
+
+	StaticModelRef model;
 }
 //-----------------------------------------------------------------------------
 bool World::Create()
@@ -141,25 +144,25 @@ bool World::Create()
 
 	spTile = renderSystem.CreateShaderProgram({ vsText }, { fsText });
 
-	geom = renderSystem.CreateGeometryBuffer(BufferUsage::StaticDraw, static_cast<unsigned>(Countof(vertices)) / 12, static_cast<unsigned>(sizeof(float)) * 12, vertices, spTile);
+	geom = renderSystem.CreateGeometryBuffer(BufferUsage::StaticDraw, static_cast<unsigned>(Countof(vertices)) / 11, static_cast<unsigned>(sizeof(float)) * 11, vertices, spTile);
 
 	Texture2DInfo texInfo;
-	texInfo.magFilter = TextureMagFilter::Linear;
-	texInfo.minFilter = TextureMinFilter::LinearMipmapLinear;
-	texInfo.mipmap = true;
+	texInfo.magFilter = TextureMagFilter::Nearest;
+	texInfo.minFilter = TextureMinFilter::NearestMipmapNearest;
+	texInfo.mipmap = false;
+	//texInfo.verticallyFlip = true;
 	diffuse = renderSystem.CreateTexture2D("../Data/Textures/testTop.png", true, texInfo);
 
 
 
 	{
-		auto model = GetGraphicsSystem().CreateModel("../Data/Models/box.obj");
+		model = GetGraphicsSystem().CreateModel("../Data/Models/box.obj");
 
 		std::vector<StaticMeshVertex> vert;
 		for (int i = 0; i < model->subMeshes[0].indices.size(); i++)
 		{
 			auto index = model->subMeshes[0].indices[i];
 			StaticMeshVertex v = model->subMeshes[0].vertices[index];
-			v.texCoords += 0.5f;
 			vert.push_back(v);
 		}
 
@@ -210,7 +213,16 @@ void World::Draw(const Viewport& view)
 	renderSystem.SetUniform("uView", view.camera.GetViewMatrix());
 	renderSystem.SetUniform("uProjection", view.perspective);
 
-	renderSystem.Draw(geom);
+	//renderSystem.Draw(geom);
+
+	for (size_t x = 0; x < 100; x++)
+	{
+		for (size_t y = 0; y < 100; y++)
+		{
+			renderSystem.SetUniform("uWorld", glm::translate(glm::mat4(1.0f), glm::vec3(x, 0.0f, y)));
+			GetGraphicsSystem().Draw(model);
+		}
+	}
 
 	m_map.Draw(view);
 }

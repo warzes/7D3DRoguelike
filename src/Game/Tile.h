@@ -25,12 +25,22 @@ enum class TileType : uint8_t
 	dirt,
 };
 
+enum class TileModel : uint8_t
+{
+	SolidBox,
+	Model1,
+	Model2,
+	Model3,
+};
+
 class Tile
 {
 public:
 	Color color{ 255, 255, 255, 255 };
 	TileSide tileSideVisible;
 	TileType type;
+	TileModel model;
+	float heightOffset = 0.0f;
 };
 
 class TileChunk
